@@ -1,0 +1,77 @@
+﻿@page "/"
+@inject HttpClient httpClient
+
+<PageTitle>Search Shapeshift</PageTitle>
+
+<h1>Search Shapeshift</h1>
+
+<input type="text" class="form-control mb-2" @bind-value="SearchKey" />
+<button class="btn btn-primary mb-2" @onclick="onSearch">Search</button>
+
+@if (Loading)
+{
+    <div class="alert alert-info">
+        Loading...
+    </div>
+}
+else
+{
+    @if (Steams.Count == 0)
+    {
+        <div class="alert alert-info">
+            No results
+        </div>
+    }
+    else
+    {
+        <ul>
+            @foreach (var steam in Steams)
+            {
+                <li style="list-style:none;border:1px solid blue;padding:10px;margin-bottom:5px">
+                    <h3>@steam.Title</h3>
+                    <ul>
+                        @foreach (var w in steam.Where)
+                        {
+                        <li>@w</li>
+                        }
+                    </ul>
+                </li>
+            }
+        </ul>
+    }
+}
+
+
+@code {
+    public string SearchKey { get; set; }
+    public List<SteamModel> Steams { get; set; } = new List<SteamModel> { };
+    public bool Loading { get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+        await Task.CompletedTask;
+    }
+
+    async Task onSearch()
+    {
+
+
+        if (!string.IsNullOrEmpty(SearchKey) && !Loading)
+        {
+            Loading = true;
+            StateHasChanged();
+            var response = await httpClient.GetFromJsonAsync<APIResponse<SteamModel>>($"https://kernaldemo.azurewebsites.net/api/Search?code=nDT2A6Ji6RlVGAiR7laKDnW3_A1Ub7LVRLDNN44Xmhr3AzFu7_gMuA==&Key={SearchKey}");
+            if (response.Status)
+            {
+                Steams = response.Data;
+            }
+            else
+            {
+
+            }
+            Loading = false;
+            StateHasChanged();
+        }
+    }
+}
+
