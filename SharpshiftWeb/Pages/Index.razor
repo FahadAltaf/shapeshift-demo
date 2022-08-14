@@ -28,7 +28,7 @@ else
             @foreach (var steam in Steams)
             {
                 <li style="list-style:none;border:1px solid blue;padding:10px;margin-bottom:5px">
-                    <h3>@steam.Title</h3>
+                    <h3> <a target="_blank" href="@steam.Url">@steam.Title</a></h3>
                     <ul>
                         @foreach (var w in steam.Where)
                         {
