@@ -19,10 +19,10 @@
         <div class="accordion-body">
             @if (!Loading)
             {
-                @foreach (var steam in Posts.Take(1))
+                @foreach (var steam in Posts)
                 {
                     <ul>
-                        @foreach (var topic in steam.topics.Take(3))
+                        @foreach (var topic in steam.topics)
                         {
                             <li><a target="_blank" href="@($"{steam.website}/t/{topic.slug}/{topic.id}")">@topic.title</a></li>
                             //   var post = steam.posts[steam.topics.IndexOf(topic)];
